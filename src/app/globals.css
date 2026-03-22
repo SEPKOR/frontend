@@ -1,26 +1,120 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  --color-border: hsl(30, 20%, 85%);
+  --color-input: hsl(30, 20%, 85%);
+  --color-ring: hsl(20, 30%, 70%);
+  
+  /* Cream background, soft brown text */
+  --color-background: hsl(40, 25%, 97%); 
+  --color-foreground: hsl(20, 20%, 20%);
+  
+  /* Dusty blush pink primary */
+  --color-primary: hsl(10, 35%, 65%);
+  --color-primary-foreground: hsl(0, 0%, 100%);
+  
+  /* Beige secondary */
+  --color-secondary: hsl(30, 25%, 92%);
+  --color-secondary-foreground: hsl(20, 20%, 30%);
+  
+  /* Classic, slightly sharp borders for luxury feel */
+  --radius-lg: 0.5rem;
+  --radius-md: calc(0.5rem - 2px);
+  --radius-sm: calc(0.5rem - 4px);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-border, currentColor);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer base {
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    background-image: 
+      radial-gradient(circle at 0% 0%, rgba(220, 190, 180, 0.15) 0%, transparent 40%),
+      radial-gradient(circle at 100% 100%, rgba(200, 180, 160, 0.15) 0%, transparent 40%);
+    background-attachment: fixed;
+    font-family: 'Merriweather', 'Georgia', serif; /* Or keep default, but this is a nice luxury fallback */
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Playfair Display', 'Georgia', serif;
+    letter-spacing: -0.02em;
+  }
+}
+
+.glass-panel {
+  background-color: rgb(255 255 255 / 0.85);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgb(0 0 0 / 0.04);
+  box-shadow: 0 20px 40px -10px rgb(0 0 0 / 0.05);
+  transition: all 0.4s ease;
+}
+
+.glass-panel:hover {
+  border-color: rgb(0 0 0 / 0.08);
+  box-shadow: 0 30px 50px -15px rgb(0 0 0 / 0.05);
+}
+
+.input-field {
+  width: 100%;
+  padding: 0.85rem 1.2rem;
+  background-color: rgb(255 255 255 / 0.6);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-foreground);
+  transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: inherit;
+}
+
+.input-field:focus {
+  border-color: var(--color-primary);
+  outline: none;
+  background-color: rgb(255 255 255 / 1);
+  box-shadow: 0 0 0 1px var(--color-primary);
+}
+
+.input-field::placeholder {
+  color: rgb(0 0 0 / 0.3);
+}
+
+.btn-primary {
+  width: 100%;
+  padding: 0.85rem 0;
+  background-color: var(--color-primary);
+  color: white;
+  border-radius: var(--radius-md);
+  box-shadow: 0 4px 14px rgba(200, 150, 140, 0.3);
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  transition: all 300ms ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background-color: hsl(10, 35%, 60%);
+  box-shadow: 0 6px 20px rgba(200, 150, 140, 0.4);
+  transform: translateY(-1px);
+}
+
+.btn-primary:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
