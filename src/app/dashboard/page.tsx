@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import api from '@/lib/api';
 import FaceScanner from '@/components/FaceScanner';
-import { Archive, Sparkles, MessageSquare, ShoppingBag } from 'lucide-react';
+import { Archive, Sparkles, MessageSquare, ShoppingBag, Stethoscope } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import ProtectedRoute from '@/components/ProtectedRoute';
 
@@ -39,6 +39,12 @@ export default function Dashboard() {
               <Link href="/chat" className="text-sm tracking-widest uppercase text-foreground/70 hover:text-foreground flex items-center gap-2">
                 <MessageSquare className="w-4 h-4" /> Consult
               </Link>
+              {/* INTEGRATION POINT: Show Doctor Panel link for doctors only */}
+              {user?.role === 'doctor' && (
+                <Link href="/doctor/dashboard" className="text-sm tracking-widest uppercase text-primary hover:text-primary/80 flex items-center gap-2 font-medium">
+                  <Stethoscope className="w-4 h-4" /> Doctor Panel
+                </Link>
+              )}
               <button onClick={logout} className="text-sm tracking-widest uppercase text-foreground/70 hover:text-foreground">
                 Sign Out
               </button>
