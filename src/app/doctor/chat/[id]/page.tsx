@@ -6,7 +6,7 @@ import Link from 'next/link';
 import api from '@/lib/api';
 import DoctorProtectedRoute from '@/components/DoctorProtectedRoute';
 import { useAuth } from '@/context/AuthContext';
-import { ArrowLeft, Send, Loader2, XCircle, Stethoscope } from 'lucide-react';
+import { ArrowLeft, Send, Loader2, XCircle, Stethoscope, UserCheck, Clock } from 'lucide-react';
 
 type Message = {
   id: number;
@@ -34,6 +34,7 @@ export default function DoctorChatRoom() {
   const [input, setInput] = useState('');
   const [sending, setSending] = useState(false);
   const [closing, setClosing] = useState(false);
+  const [accepting, setAccepting] = useState(false);
   const [loading, setLoading] = useState(true);
   const bottomRef = useRef<HTMLDivElement>(null);
 
@@ -74,6 +75,18 @@ export default function DoctorChatRoom() {
       console.error('Failed to send message', err);
     } finally {
       setSending(false);
+    }
+  };
+  
+  const acceptConsultation = async () => {
+    setAccepting(true);
+    try {
+      await api.post(`/chat/${id}/accept`);
+      await fetchMessages();
+    } catch (err) {
+      console.error('Failed to accept chat', err);
+    } finally {
+      setAccepting(false);
     }
   };
 
@@ -122,7 +135,18 @@ export default function DoctorChatRoom() {
               </div>
             </div>
 
-            {chat?.status !== 'closed' && (
+            {chat?.status === 'waiting' && (
+              <button
+                onClick={acceptConsultation}
+                disabled={accepting}
+                className="flex items-center gap-2 text-xs uppercase tracking-widest text-primary hover:text-primary/80 transition-colors font-medium border border-primary/20 px-4 py-2 rounded-lg bg-primary/5"
+              >
+                {accepting ? <Loader2 className="w-3 h-3 animate-spin" /> : <Stethoscope className="w-3 h-3" />}
+                Accept Consultation
+              </button>
+            )}
+
+            {chat?.status === 'active' && (
               <button
                 onClick={closeConsultation}
                 disabled={closing}
@@ -176,6 +200,27 @@ export default function DoctorChatRoom() {
                 })}
                 <div ref={bottomRef} />
               </div>
+              
+              {/* Doctor Joining Promo */}
+              {chat?.status === 'waiting' && (
+                <div className="p-8 border-t border-amber-100 bg-amber-50/30 text-center animate-in fade-in slide-in-from-bottom-2 duration-700">
+                   <div className="w-12 h-12 rounded-full bg-amber-100 flex items-center justify-center text-amber-600 mx-auto mb-4">
+                      <Clock className="w-6 h-6" />
+                   </div>
+                   <h3 className="text-lg font-serif text-foreground mb-2">Joining Queue</h3>
+                   <p className="text-sm text-foreground/50 font-light max-w-sm mx-auto mb-6">
+                      This patient is currently waiting for a specialist. Accept the request to start the live consultation.
+                   </p>
+                   <button
+                     onClick={acceptConsultation}
+                     disabled={accepting}
+                     className="px-8 py-3 bg-primary text-white text-xs font-medium tracking-widest uppercase rounded-xl hover:bg-primary/90 transition-all flex items-center justify-center gap-2 mx-auto"
+                   >
+                     {accepting ? <Loader2 className="w-4 h-4 animate-spin" /> : <UserCheck className="w-4 h-4" />}
+                     Accept Patient & Connect
+                   </button>
+                </div>
+              )}
 
               {/* Input */}
               {chat?.status === 'closed' ? (

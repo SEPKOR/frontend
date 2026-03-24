@@ -157,9 +157,28 @@ export default function ChatConsultant() {
         </nav>
 
         <div className="flex-1 max-w-4xl mx-auto w-full px-6 pt-12 flex flex-col">
+          
+          {/* ── DOCTOR REDIRECT ── */}
+          {user?.role === 'doctor' && (
+            <div className="flex-1 flex flex-col items-center justify-center text-center animate-in fade-in zoom-in-95 duration-500">
+               <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center text-primary mb-8">
+                  <UserCheck className="w-10 h-10" />
+               </div>
+               <h1 className="text-3xl font-serif text-foreground mb-4">Doctor Access Detected</h1>
+               <p className="text-foreground/60 font-light max-w-md mx-auto mb-10 leading-relaxed">
+                 You are currently logged in with a doctor account. To manage and respond to patient consultations, please use your dedicated dashboard.
+               </p>
+               <Link 
+                 href="/doctor/dashboard" 
+                 className="px-10 py-4 bg-primary text-white font-medium tracking-widest uppercase text-xs rounded-xl hover:bg-primary/90 transition-all shadow-lg shadow-primary/20 flex items-center gap-3"
+               >
+                 Go to Doctor Panel <ArrowRight className="w-4 h-4" />
+               </Link>
+            </div>
+          )}
 
-          {/* ── SELECTION VIEW ── */}
-          {view === 'selection' && (
+          {/* ── SELECTION VIEW (Only for Patients) ── */}
+          {user?.role !== 'doctor' && view === 'selection' && (
             <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
               <div className="text-center mb-12">
                 <h1 className="text-4xl font-serif text-foreground mb-3">Choose Your Consultation</h1>
@@ -211,8 +230,8 @@ export default function ChatConsultant() {
             </div>
           )}
 
-          {/* ── AI CHAT VIEW ── */}
-          {view === 'ai-chat' && (
+          {/* ── AI CHAT VIEW (Only for Patients) ── */}
+          {user?.role !== 'doctor' && view === 'ai-chat' && (
             <div className="flex-1 glass-panel rounded-2xl flex flex-col overflow-hidden shadow-2xl shadow-black/5 animate-in fade-in zoom-in-95 duration-500 border border-border/50" style={{ height: '600px' }}>
               {/* Header */}
               <div className="flex items-center justify-between p-6 border-b border-border bg-white/50 backdrop-blur-sm rounded-t-2xl">
@@ -269,8 +288,8 @@ export default function ChatConsultant() {
             </div>
           )}
 
-          {/* ── REAL CONSULTATION VIEW ── */}
-          {view === 'consultation' && session && (
+          {/* ── REAL CONSULTATION VIEW (Only for Patients) ── */}
+          {user?.role !== 'doctor' && view === 'consultation' && session && (
             <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 flex flex-col gap-4 flex-1">
               {/* Status Banner */}
               <div className="glass-panel rounded-xl p-5 flex items-center justify-between border border-border/50">

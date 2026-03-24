@@ -13,7 +13,12 @@ export default function Home() {
         <h1 className="text-xl font-bold tracking-widest uppercase text-foreground/80">Aura Botanical</h1>
         <div className="flex gap-8 items-center">
           <Link href="/dashboard" className="text-xs font-medium tracking-widest text-foreground/60 hover:text-foreground transition-colors uppercase hidden sm:block">Diagnostic</Link>
-          <Link href="/chat" className="text-xs font-medium tracking-widest text-foreground/60 hover:text-foreground transition-colors uppercase hidden sm:block">Consultant</Link>
+          <Link 
+            href={user?.role === 'doctor' ? "/doctor/dashboard" : "/chat"} 
+            className="text-xs font-medium tracking-widest text-foreground/60 hover:text-foreground transition-colors uppercase hidden sm:block"
+          >
+            {user?.role === 'doctor' ? 'Consultations' : 'Consultant'}
+          </Link>
           <Link href="/products" className="text-xs font-medium tracking-widest text-foreground/60 hover:text-foreground transition-colors uppercase hidden sm:block">Collection</Link>
           
           <div className="w-px h-4 bg-border hidden sm:block"></div>

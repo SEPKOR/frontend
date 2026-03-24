@@ -36,8 +36,11 @@ export default function Dashboard() {
               <Link href="/products" className="text-sm tracking-widest uppercase text-foreground/70 hover:text-foreground flex items-center gap-2">
                 <ShoppingBag className="w-4 h-4" /> Products
               </Link>
-              <Link href="/chat" className="text-sm tracking-widest uppercase text-foreground/70 hover:text-foreground flex items-center gap-2">
-                <MessageSquare className="w-4 h-4" /> Consult
+              <Link 
+                href={user?.role === 'doctor' ? "/doctor/dashboard" : "/chat"} 
+                className="text-sm tracking-widest uppercase text-foreground/70 hover:text-foreground flex items-center gap-2"
+              >
+                <MessageSquare className="w-4 h-4" /> {user?.role === 'doctor' ? 'Consultations' : 'Consult'}
               </Link>
               {/* INTEGRATION POINT: Show Doctor Panel link for doctors only */}
               {user?.role === 'doctor' && (
